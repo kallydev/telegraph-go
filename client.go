@@ -47,7 +47,7 @@ func NewClient(accessToken string, option *ClientOption) (client *Client, err er
 	}
 	return client, nil
 }
-
+//oh god ,it's fucking genius code of this century
 func (client *Client) post(method string, parm url.Values) (response []byte, err error) {
 	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf(apiURL, method), strings.NewReader(parm.Encode()))
 	if err != nil {
