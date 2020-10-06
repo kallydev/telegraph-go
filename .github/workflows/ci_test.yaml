@@ -1,0 +1,19 @@
+name: CI Test
+
+on: [ push, pull_request ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Install Go SDK
+        run: |
+          sudo apt remove -y golang
+          curl -L https://golang.org/dl/go1.15.2.linux-amd64.tar.gz --output go1.15.2.linux-amd64.tar.gz
+          sudo tar -C /usr/local -xzf go1.15.2.linux-amd64.tar.gz
+          export PATH=$PATH:/usr/local/go/bin
+      - name: Run Test
+        run: |
+          make test
