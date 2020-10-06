@@ -49,7 +49,7 @@ func main() {
 					Tag: "img",
 					Attrs: map[string]string{
 						"src":  paths[0],
-						"attr": "Banner",
+						"alt": "Banner",
 					},
 				},
 			},
