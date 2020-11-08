@@ -1,6 +1,6 @@
 # Telegraph Go
 
-Golang [Telegraph API](https://telegra.ph/api) SDK. "Nobody knows more about [Telegraph](https://telegra.ph/) than I do!" Trump waved and said excitedly.
+Golang [Telegraph API](https://telegra.ph/api) SDK.
 
 ## Guide
 
