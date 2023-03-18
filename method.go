@@ -366,46 +366,60 @@ func (client *Client) Upload(filenames []string) (paths []string, err error) {
 
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
+
 	for _, filename := range filenames {
 		file, err := os.Open(filename)
 		if err != nil {
 			return nil, err
 		}
+		
 		files = append(files, file)
+
 		part, err := writer.CreateFormFile(uuid.New().String(), filename)
 		if err != nil {
 			return nil, err
 		}
+
 		if _, err = io.Copy(part, file); err != nil {
 			return nil, err
 		}
 	}
+
 	if err = writer.Close(); err != nil {
 		return nil, err
 	}
+
 	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf(baseURL, methodUpload), body)
 	if err != nil {
 		return nil, err
 	}
+
 	request.Header.Set("Content-Type", writer.FormDataContentType())
+
 	httpResponse, err := client.httpClient.Do(request)
 	if err != nil {
 		return nil, err
 	}
+	defer httpResponse.Body.Close()
+
 	data, err := ioutil.ReadAll(httpResponse.Body)
 	if err != nil {
 		return nil, err
 	}
+
 	responseUploadModels := make([]responseUpload, 0)
 	if err := json.Unmarshal(data, &responseUploadModels); err != nil {
 		m := map[string]string{}
 		if err := json.Unmarshal(data, &m); err != nil {
 			return nil, err
 		}
+
 		return nil, errors.New(strings.ToLower(m["error"]))
 	}
+
 	for _, upload := range responseUploadModels {
 		paths = append(paths, upload.Path)
 	}
+
 	return paths, nil
 }
