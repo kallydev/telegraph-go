@@ -355,6 +355,15 @@ func (client *Client) RevokeAccessToken() (account *Account, err error) {
 }
 
 func (client *Client) Upload(filenames []string) (paths []string, err error) {
+	var files []*os.File
+
+	// Close the file handle finished processing.
+	defer func() {
+		for _, file := range files {
+			file.Close()
+		}
+	}()
+
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	for _, filename := range filenames {
@@ -362,6 +371,7 @@ func (client *Client) Upload(filenames []string) (paths []string, err error) {
 		if err != nil {
 			return nil, err
 		}
+		files = append(files, file)
 		part, err := writer.CreateFormFile(uuid.New().String(), filename)
 		if err != nil {
 			return nil, err
