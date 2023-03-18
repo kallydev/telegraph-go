@@ -53,17 +53,13 @@ func (client *Client) post(method string, parm url.Values) (response []byte, err
 	if err != nil {
 		return nil, err
 	}
-
 	resp, err := client.httpClient.Do(request)
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
-
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
-
 	return data, nil
 }
